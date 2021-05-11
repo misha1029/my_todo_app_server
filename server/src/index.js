@@ -101,6 +101,7 @@ transaction(1, 2, 10000)
 import express from 'express';
 const cors = require('cors');
 import router from "./router";
+import errorHandler from "./middlewares/errorHandler.js";
 
 const PORT = 7777;
 
@@ -109,7 +110,7 @@ app.use(cors());
 app.use(express.json()) //Content-type application/json
 
 app.use(router);
-
+app.use (errorHandler);
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`)
 });
