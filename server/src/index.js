@@ -99,33 +99,17 @@ transaction(1, 2, 10000)
 ///////////////////////////////////////////////////////////////
 
 import express from 'express';
-import {User} from './db/models';
+const cors = require('cors');
+import router from "./router";
 
 const PORT = 7777;
 
 const app = express();
-app.use(express.json())
+app.use(cors());
+app.use(express.json()) //Content-type application/json
 
-app.get('/', (req, res, next) => {
-  res.send('Hello World!')
-})
-
-app.post('/user', async (req, res, next) => {
-  try {
-    const createdUser = await User.create(req.body)
-
-    res.send(createdUser);
-  } catch (e) {
-    next(e)
-  }
-
-})
-
-app.use(function (err, req, res, next) {
-  console.error(err.stack)
-  res.status(500).send('Something broke!');
-})
+app.use(router);
 
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`)
-})
+});
