@@ -1,11 +1,15 @@
-import {updateUserSchema, createUserSchema} from "../../utils/dataValidations/user.js";
+import { userSchema } from "../../utils/dataValidations/user.js";
 
 export default async function (req, res, next) {
   try {
-    const result = await (req.method === 'POST' ? createUserSchema : updateUserSchema).validateAsync(req.body)
-    return next();
+    const { value } = await userSchema.validateAsync(req.body, {
+      context: {
+        isCreate: req.method === "POST",
+      },
+    });
+    req.userValue = value;
+    next();
   } catch (e) {
     next(e);
   }
-
 }
